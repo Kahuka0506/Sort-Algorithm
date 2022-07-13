@@ -1,3 +1,1 @@
-# Sort Algorothm Visualizer
-
-
+# Sort Algorithm Visualizer

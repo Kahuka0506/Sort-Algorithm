@@ -3,18 +3,19 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="main.css" />
+    <script type="text/javascript" src="main.js"></script>
     <title>Sort Algorithm</title>
 </head>
 <body>
-     
+
     <p>
         <h1>Sort Algorithm</h1>
     </p>
     <p>
-        
+
     </p>
     <p>
-        <div>
+        <div class="main_style1">
             <!--<p>Click somewhere in window to stop count up <span id="countup">1</span></p>-->
             <p>
                 <span style="padding:4px;color: black;font-family: sans-serif;font-size: 30px;">Bubble Sort</span>
@@ -22,133 +23,22 @@
                 Number of Iterarions:<span id="cnt1">0</span>
                 </p>
             </p>
-            
             <div id="sort_bar1"></div>
         </div>
-         
-         
-    </p>
-     
-    <script>
-        let is_count = 1;
-         
-        
-        const box = document.getElementById("box");
-        let moveX = 0;
-        let dx = 5;
-        let moveY = 0;
-        let dy = 4;
-        
-        var N = 30;
-        var A = [];
-        
-        let change_bar1 = function(xxx,hhh,ff){
-            var parent_element = document.getElementById('sort_bar1');
-              
-            var new_element = document.createElement('div');
-            if(ff == 0) new_element.style = `width: 18px; height: ${hhh*10}px; background-color: white; border: solid black 2px; position: absolute; transform: translate(${10+20*xxx}px,${300-hhh*10-20}px);`;
-            else new_element.style = `width: 16px; height: ${hhh*10}px; background-color: white; border: solid blue 3px; position: absolute; transform: translate(${10+20*xxx}px,${300-hhh*10-20}px);`;
-            parent_element.appendChild(new_element);
-        }
-        
-        
-        var A_bubble_sort = [];
-        let bubble_sort = function(){
-            A = new Array(N);
-            for(var i = 0; i < N; i++) A[i] = i+1;
-            for(var i = 0; i < 10000; i++){
-                var a = Math.floor(Math.random() * N);
-                var b = Math.floor(Math.random() * N);
-                var aa = A[a];
-                A[a] = A[b];
-                A[b] = aa;
-            }
-            
-            A_bubble_sort = new Array(N*N+1);
-            for(var b = 0; b < N*N+1; b++) {
-              A_bubble_sort[b] = new Array(N);
-              for(var a = 0; a < N; a++) {
-                  A_bubble_sort[b][a] = 0;
-              }
-            }
-            var cn = 0;
-            for(var k = 0; k < N; k++) A_bubble_sort[cn][k] = A[k];
-            for(var i = 0; i < N; i++){
-                for(var j = 0; j < N-i; j++){
-                    if(A[j-1] > A[j]){
-                        var a = A[j-1];
-                        A[j-1] = A[j];
-                        A[j] = a;
-                    }
-                    cn++;
-                    for(var k = 0; k < N; k++) A_bubble_sort[cn][k] = A[k];
-                }
-            }
-            console.log(A_bubble_sort);
-        }
-        
-         
-        bubble_sort();
-         
-         
-        let loopFactry = function(){
-            let handler = {};
-            let step_sz = 0;
-            var cnt_bubble_sort = 0;
-            
-            let loop = function(){
-                step_sz += 1;
-                var fin = 0;
-                
-                if(step_sz % 5 == 0){
-                    let el = document.getElementById("cnt1");
-                    el.innerHTML = cnt_bubble_sort;
-                    
-                    var parent_element = document.getElementById('sort_bar1');
-                    for (let i = parent_element.childNodes.length-1; i>=0; i--) {
-                        parent_element.removeChild(parent_element.childNodes[i]);
-                    }
-                    for(var k = 0; k < N; k++) {
-                        var ff = 0;
-                        if(cnt_bubble_sort > 0) if(A_bubble_sort[cnt_bubble_sort][k] != A_bubble_sort[cnt_bubble_sort-1][k]) ff = 1;
-                        change_bar1(k, A_bubble_sort[cnt_bubble_sort][k], ff);
-                    }
-                    var f = 1;
-                    for(var i = 0; i < N-1; i++){
-                        if(A_bubble_sort[cnt_bubble_sort][i] > A_bubble_sort[cnt_bubble_sort][i+1]) f=0;
-                    }
-                    if(f == 0) cnt_bubble_sort++;
-                    else fin = 1;
-                }
-                
-                if(step_sz >= 1000) step_sz = 0;
-                if(fin == 1){
-                    console.log("finish");
-                }else{
-                    handler.id = requestAnimationFrame(loop);
-                }
-            }
-            handler.id = requestAnimationFrame(loop);
-            return handler;
-        }
+        <br/>
+        <div class="main_style1">
+            <!--<p>Click somewhere in window to stop count up <span id="countup">1</span></p>-->
+            <p>
+                <span style="padding:4px;color: black;font-family: sans-serif;font-size: 30px;">Bubble Sort</span>
+                <p>
+                Number of Iterarions:<span id="cnt2">0</span>
+                </p>
+            </p>
+            <div id="sort_bar2"></div>
+        </div>
 
-         
- 
-        let interval = loopFactry();
-        
-        window.onclick = function(){
-            if(is_count == 0) {
-                bubble_sort();
-                console.log(is_count);
-                is_count = 1;
-                interval = loopFactry();
-            }else{
-                console.log(is_count);
-                is_count = 0;
-                cancelAnimationFrame(interval.id);
-            }
-        };
-    </script>
+    </p>
+
 </body>
 
 
