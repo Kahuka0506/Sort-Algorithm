@@ -33,15 +33,62 @@ h1{
     transform: translate(-50%, -50%)
   }
 
-  .main_style1 {
-      background: white;
-      font-family: sans-serif;
-      color: black;
-      font-size: 20px;
-      border-radius: 1em;
-      border: solid black 1px;
-      padding: 1em;
-      position: relative;
-      width: 70%;
-      height: 500px;
-    }
+.main_style1 {
+    background: white;
+    font-family: sans-serif;
+    color: black;
+    font-size: 20px;
+    border-radius: 1em;
+    border: solid black 1px;
+    padding: 1em;
+    position: absolute;
+    width: 45%;
+    height: 40%;
+    top: 10%;
+    left: 1%;
+}
+
+.main_style2 {
+    background: white;
+    font-family: sans-serif;
+    color: black;
+    font-size: 20px;
+    border-radius: 1em;
+    border: solid black 1px;
+    padding: 1em;
+    position: absolute;
+    width: 45%;
+    height: 40%;
+    top:55%;
+    left: 1%;
+}
+
+.main_style3 {
+    background: white;
+    font-family: sans-serif;
+    color: black;
+    font-size: 20px;
+    border-radius: 1em;
+    border: solid black 1px;
+    padding: 1em;
+    position: absolute;
+    width: 45%;
+    height: 40%;
+    top: 10%;
+    left: 50%;
+}
+
+.main_style4 {
+    background: white;
+    font-family: sans-serif;
+    color: black;
+    font-size: 20px;
+    border-radius: 1em;
+    border: solid black 1px;
+    padding: 1em;
+    position: absolute;
+    width: 45%;
+    height: 40%;
+    top: 55%;
+    left: 50%;
+}
