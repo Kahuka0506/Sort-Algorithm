@@ -1,18 +1,26 @@
 var is_count = 1;
+const N = 40;
+var bar_w = 20;
+var bar_h = 20;
+const max_A = 60;
 
+var bar_scale = function(){
+    bar_w = window.innerWidth*0.4*0.89/N;
+    bar_h = window.innerHeight*0.4*0.6/max_A;
+}
+    
 var change_bar = function(xxx,hhh,ff,element_id){
-    var parent_element = document.getElementById(element_id);
-    var new_element = document.createElement('div');
-    if(ff == 0) new_element.style = `width: 18px; height: ${hhh*10}px; background-color: #87CEEB; border: solid black 0px; position: absolute; transform: translate(${20+20*xxx}px,${340-hhh*10-20}px);`;
-    else if(ff == 1) new_element.style = `width: 16px; height: ${hhh*10}px; background-color: #20b2aa; border: solid blue 0px; position: absolute; transform: translate(${20+20*xxx}px,${340-hhh*10-20}px);`;
-    else new_element.style = `width: 16px; height: ${hhh*10}px; background-color: #fa8072; border: solid blue 0px; position: absolute; transform: translate(${20+20*xxx}px,${340-hhh*10-20}px);`;
+    let parent_element = document.getElementById(element_id);
+    let new_element = document.createElement('div');
+    if(ff == 0) new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #87CEEB; border: solid black 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
+    else if(ff == 1) new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #20b2aa; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
+    else new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #fa8072; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
     parent_element.appendChild(new_element);
 }
  
 
 
 
-var N = 45;
 var sort_result1 = [];
 var sort_result2 = [];
 var sort_result3 = [];
@@ -25,7 +33,8 @@ var A = [];
 
 var reset_array_A = function(){
     A = new Array(N);
-    for(let i = 0; i < N; i++) A[i] = i+1;
+    for(let i = 0; i < N; i++) A[i] = Math.floor(Math.random()*max_A)+1;
+    return;
     for(let i = 0; i < 1000; i++){
         let a = Math.floor(Math.random() * N);
         let b = Math.floor(Math.random() * N);
@@ -193,7 +202,7 @@ var shell_sort = function(){
             }
         }
 
-        h = Math.trunc(h/2-0.5);
+        h = Math.trunc(h/2);
     }
     for(let i = 1; i < N; i++){
         for(var j = i; j >= 0; j--){
@@ -262,6 +271,61 @@ var merge_sort = function(){
 }
 
 
+var heap_sort = function(){
+    let res = new Array(N*N+1);
+    for(let b = 0; b < N*N+1; b++) {
+      res[b] = new Array(N);
+      for(let a = 0; a < N; a++) {
+          res[b][a] = -1;
+      }
+    }
+    let res_color = new Array(N*N+1);
+    for(let b = 0; b < N*N+1; b++) {
+      res_color[b] = new Array(N);
+      for(let a = 0; a < N; a++) {
+          res_color[b][a] = 0;
+      }
+    }
+    
+    let cn = 0;
+    for(let k = 0; k < N; k++) res[cn][k] = A[k];
+    cn++;
+    let downheap = function(k,r){
+        let v = A[k];
+        while(1){
+            let j = 2*k+1;
+            if(j > r) break;
+            if(j != r) {
+                if(A[j+1] > A[j]) j += 1;
+            }
+            if(v >= A[j]) break;
+            A[k] = A[j];
+            k = j;
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
+            res_color[cn][k] = res_color[cn][j] = 2;
+            cn++;
+        }
+        A[k] = v;
+        for(let k = 0; k < N; k++) res[cn][k] = A[k];
+        cn++;
+    }
+    for(let i = Math.floor((N-2)/2); i >= 0; i--){
+        downheap(i,N-1);
+    }
+    for(let i = N-1; i > 0; i--){
+        let a = A[0];
+        A[0] = A[i];
+        A[i] = a;
+        for(let k = 0; k < N; k++) res[cn][k] = A[k];
+        res_color[cn][0] = res_color[cn][i] = 2;
+        cn++;
+        downheap(0,i-1);
+    }
+    res[cn][0] = -1;
+    return [res,res_color];
+}
+
+
 var comb_sort = function(){
     let res = new Array(N*N+1);
     for(let b = 0; b < N*N+1; b++) {
@@ -295,13 +359,13 @@ var comb_sort = function(){
                 res_color[cn][i+h] = 2;
                 f = 1;
             }
-            for(let k = 0; k < N; k++) res[cn][k] = A[k]; 
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
             cn++;
         }
 
         if(f == 1) h = Math.max(1,Math.trunc(h/1.3-0.5));
         else break;
-    } 
+    }
     res[cn][0] = -1;
     return [res,res_color];
 }
@@ -329,9 +393,9 @@ var quick_sort = function(){
     cn++;
 
     var rec_quick_sort = function(l,r){
-        //console.log(l,r)
-        if(r-l <= 1) return; 
-        let mm = [A[l],A[Math.trunc((l+r)/2)],A[r-1]];
+        //if(r-l <= 1) return;
+        /*
+        let mm = [A[l],A[Math.trunc((l+r-1)/2)],A[r-1]];
         if(mm[0] > mm[1]) {
             let a = mm[0]; mm[0] = mm[1]; mm[1] = a;
         }
@@ -341,14 +405,15 @@ var quick_sort = function(){
         if(mm[1] > mm[2]){
             let a = mm[1]; mm[1] = mm[2]; mm[2] = a;
         }
-        let m = mm[1];
+         */
+        let m = A[Math.floor(Math.random()*(r-l))+l];//A[Math.trunc((l+r-1)/2)];
         
 
         let L = l, R = r-1;
         while(1){
             for (let i = L; i < r; i++) {
+                L = i;
                 if(m <= A[i]){
-                    L = i;
                     break;
                 }else{
                     for(let k = 0; k < N; k++) res[cn][k] = A[k];
@@ -359,10 +424,10 @@ var quick_sort = function(){
                 }
             } 
             for (let i = R; i >= l; i--){
-                if(A[i] < m) {
-                    R = i;
+                R = i;
+                if(A[i] <= m) {
                     break;
-                } else{
+                }else{
                     for(let k = 0; k < N; k++) res[cn][k] = A[k];
                     for(let k = l; k < r; k++) res_color[cn][k] = 1;
                     res_color[cn][L] = 1;
@@ -379,18 +444,18 @@ var quick_sort = function(){
                 for(let k = l; k < r; k++) res_color[cn][k] = 1;
                 res_color[cn][L] = res_color[cn][R] = 2; 
                 cn++;
-                if(cn >= N*N) return;
+                if(cn >= N*N-10) return;
                 L++;
                 R--;
             }else {
-                rec_quick_sort(l, L);
-                rec_quick_sort(L, r);
+                if(L-l >= 2) rec_quick_sort(l, L);
+                if(r-L >= 2) rec_quick_sort(L, r);
                 break;
             }
         }
         let f = 0;
         for(let i = l; i < r-1; i++) if(A[i] > A[i+1]) f = 1;
-        if(f == 1) rec_quick_sort(l,r);
+        //if(f == 1) rec_quick_sort(l,r);
 
     }
 
@@ -406,43 +471,47 @@ var quick_sort = function(){
 
 
 var init_visualizer = function(){
-    reset_array_A(); 
+    reset_array_A();
+    let A0 = new Array(N);
+    for(let i = 0; i < N; i++) A0[i] = A[i];
     //let res1 = bubble_sort();
     //let res1 = insertion_sort();
+    //let res1 = selection_sort();
+    //let res1 = comb_sort();
     let res1 = shell_sort();
     sort_result1 = res1[0];
     sort_result_color1 = res1[1]; 
-
-    reset_array_A();
+    
+    for(let i = 0; i < N; i++) A[i] = A0[i];
     let res2 = quick_sort();
     sort_result2 = res2[0];
     sort_result_color2 = res2[1]; 
-
-    reset_array_A();
-    //let res3 = selection_sort();
+    
+    for(let i = 0; i < N; i++) A[i] = A0[i];
     let res3 = merge_sort();
     sort_result3= res3[0];
     sort_result_color3 = res3[1]; 
-
-    reset_array_A();
-    let res4 = comb_sort();
+    
+    for(let i = 0; i < N; i++) A[i] = A0[i];
+    let res4 = heap_sort();
     sort_result4 = res4[0];
-    sort_result_color4 = res4[1]; 
+    sort_result_color4 = res4[1];
+    
+    bar_scale();
 }
 
 
 
 init_visualizer();
+var handler = {};
+var step_sz = 0;
+var cnt = 0;
 var loopFactry = function(){
-    let handler = {};
-    let step_sz = 0;
-    let cnt = 0;
-
     let loop = function(){
         step_sz += 1;
         let fin = 0;
 
-        if(step_sz % 10 == 0){
+        if(step_sz % 4 == 0){
             let f1 = 0, f2 = 0, f3 = 0, f4 = 0;
 
             if(sort_result1[cnt][0] != -1){
@@ -506,6 +575,8 @@ var loopFactry = function(){
         if(step_sz >= 1000) step_sz = 0;
         if(fin == 1){
             console.log("finish");
+            is_count = 0;
+            cnt = -1;
         }else{
             handler.id = requestAnimationFrame(loop);
         }
@@ -520,17 +591,24 @@ var loopFactry = function(){
 
 
 
-
 var interval = loopFactry();
 window.onclick = function(){
+    console.log(cnt,is_count)
     if(is_count == 0) {
-        init_visualizer();
-        console.log(is_count);
-        is_count = 1;
-        interval = loopFactry();
+        if(cnt == -1){
+            init_visualizer();
+            is_count = 1;
+            
+            handler = {};
+            step_sz = 0;
+            cnt = 0;
+            interval = loopFactry();
+        }else{
+            is_count = 1;
+            interval = loopFactry();
+        }
     }else{
-        console.log(is_count);
         is_count = 0;
         cancelAnimationFrame(interval.id);
-    }
+     }
 };
