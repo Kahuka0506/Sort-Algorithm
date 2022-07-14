@@ -1,14 +1,17 @@
-var is_count = 1;
+var is_count = 0;
 const N = 40;
 var bar_w = 20;
 var bar_h = 20;
-const max_A = 60;
+const max_A = 70;
+
+var slidebar_el = document.getElementById("slidebar_cnt");
+slidebar_el.value = 0;
 
 var bar_scale = function(){
     bar_w = window.innerWidth*0.4*0.89/N;
     bar_h = window.innerHeight*0.4*0.6/max_A;
 }
-    
+
 var change_bar = function(xxx,hhh,ff,element_id){
     let parent_element = document.getElementById(element_id);
     let new_element = document.createElement('div');
@@ -17,7 +20,7 @@ var change_bar = function(xxx,hhh,ff,element_id){
     else new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #fa8072; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
     parent_element.appendChild(new_element);
 }
- 
+
 
 
 
@@ -29,7 +32,7 @@ var sort_result_color1 = [];
 var sort_result_color2 = [];
 var sort_result_color3 = [];
 var sort_result_color4 = [];
-var A = [];
+var A = [], A0 = [];
 
 var reset_array_A = function(){
     A = new Array(N);
@@ -73,7 +76,7 @@ var bubble_sort = function(){
                 //res_color[cn][j-1] = 2;
                 res_color[cn][j] = 2;
             }
-            for(let k = 0; k < N; k++) res[cn][k] = A[k]; 
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
             cn++;
         }
     }
@@ -109,7 +112,7 @@ var insertion_sort = function(){
                 A[j] = a;
             }else break;
             res_color[cn][j] = 2;
-            for(let k = 0; k < N; k++) res[cn][k] = A[k]; 
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
             cn++;
         }
     }
@@ -196,7 +199,7 @@ var shell_sort = function(){
                         res_color[cn][I[j-1]] = 2;
                     }else break;
                     res_color[cn][I[j]] = 2;
-                    for(let k = 0; k < N; k++) res[cn][k] = A[k]; 
+                    for(let k = 0; k < N; k++) res[cn][k] = A[k];
                     cn++;
                 }
             }
@@ -212,7 +215,7 @@ var shell_sort = function(){
                 A[j] = a;
             }else break;
             res_color[cn][j] = 2;
-            for(let k = 0; k < N; k++) res[cn][k] = A[k]; 
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
             cn++;
         }
     }
@@ -253,7 +256,7 @@ var merge_sort = function(){
         R.push(1000000000);
         let Li = 0, Ri = 0;
         for(let i = l; i < r; i++){
-            if(L[Li] < R[Ri]) A[i] = L[Li], Li++; 
+            if(L[Li] < R[Ri]) A[i] = L[Li], Li++;
             else A[i] = R[Ri], Ri++;
 
             for(let k = l; k < r; k++) res_color[cn][k] = 1;
@@ -286,7 +289,7 @@ var heap_sort = function(){
           res_color[b][a] = 0;
       }
     }
-    
+
     let cn = 0;
     for(let k = 0; k < N; k++) res[cn][k] = A[k];
     cn++;
@@ -407,7 +410,7 @@ var quick_sort = function(){
         }
          */
         let m = A[Math.floor(Math.random()*(r-l))+l];//A[Math.trunc((l+r-1)/2)];
-        
+
 
         let L = l, R = r-1;
         while(1){
@@ -422,7 +425,7 @@ var quick_sort = function(){
                     res_color[cn][R] = 1;
                     cn++;
                 }
-            } 
+            }
             for (let i = R; i >= l; i--){
                 R = i;
                 if(A[i] <= m) {
@@ -434,7 +437,7 @@ var quick_sort = function(){
                     res_color[cn][i] = 0;
                     cn++;
                 }
-            }  
+            }
 
             if(L < R){
                 let a = A[L];
@@ -442,7 +445,7 @@ var quick_sort = function(){
                 A[R] = a;
                 for(let k = 0; k < N; k++) res[cn][k] = A[k];
                 for(let k = l; k < r; k++) res_color[cn][k] = 1;
-                res_color[cn][L] = res_color[cn][R] = 2; 
+                res_color[cn][L] = res_color[cn][R] = 2;
                 cn++;
                 if(cn >= N*N-10) return;
                 L++;
@@ -469,10 +472,23 @@ var quick_sort = function(){
 
 
 
-
+var draw_init_A = function(){
+    for(let ii = 1; ii <= 4; ii++){
+        let num = ii;
+        let el = document.getElementById("cnt"+num.toString(10));
+        el.innerHTML = 0;
+        let parent_element = document.getElementById("sort_bar"+num.toString(10));
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, A0[k], 0,"sort_bar"+num.toString(10));
+        }
+    }
+}
 var init_visualizer = function(){
     reset_array_A();
-    let A0 = new Array(N);
+    A0 = new Array(N);
     for(let i = 0; i < N; i++) A0[i] = A[i];
     //let res1 = bubble_sort();
     //let res1 = insertion_sort();
@@ -480,29 +496,32 @@ var init_visualizer = function(){
     //let res1 = comb_sort();
     let res1 = shell_sort();
     sort_result1 = res1[0];
-    sort_result_color1 = res1[1]; 
-    
+    sort_result_color1 = res1[1];
+
     for(let i = 0; i < N; i++) A[i] = A0[i];
     let res2 = quick_sort();
     sort_result2 = res2[0];
-    sort_result_color2 = res2[1]; 
-    
+    sort_result_color2 = res2[1];
+
     for(let i = 0; i < N; i++) A[i] = A0[i];
     let res3 = merge_sort();
     sort_result3= res3[0];
-    sort_result_color3 = res3[1]; 
-    
+    sort_result_color3 = res3[1];
+
     for(let i = 0; i < N; i++) A[i] = A0[i];
     let res4 = heap_sort();
     sort_result4 = res4[0];
     sort_result_color4 = res4[1];
-    
+
     bar_scale();
 }
 
 
 
+
+
 init_visualizer();
+draw_init_A();
 var handler = {};
 var step_sz = 0;
 var cnt = 0;
@@ -570,13 +589,14 @@ var loopFactry = function(){
 
             if(f1 == 1 || f2 == 1 || f3 == 1 || f4 == 1) cnt++;
             else fin = 1;
+
+            slidebar_el.value = cnt;
         }
 
         if(step_sz >= 1000) step_sz = 0;
         if(fin == 1){
             console.log("finish");
-            is_count = 0;
-            cnt = -1;
+            OnButtonClick_start_stop();
         }else{
             handler.id = requestAnimationFrame(loop);
         }
@@ -589,16 +609,15 @@ var loopFactry = function(){
 
 
 
-
-
-var interval = loopFactry();
+var interval;
+/*
 window.onclick = function(){
     console.log(cnt,is_count)
     if(is_count == 0) {
         if(cnt == -1){
             init_visualizer();
             is_count = 1;
-            
+
             handler = {};
             step_sz = 0;
             cnt = 0;
@@ -612,3 +631,160 @@ window.onclick = function(){
         cancelAnimationFrame(interval.id);
      }
 };
+*/
+
+slidebar_el.oninput = function(){
+    cnt = slidebar_el.value;
+    if(sort_result1[cnt][0] == -1){
+        let cn = 0;
+        for(let k = cnt; k >= 0; k--) if(sort_result1[k][0] != -1){
+            cn = k;
+            break;
+        }
+        let el = document.getElementById("cnt1");
+        el.innerHTML = cn;
+        let parent_element = document.getElementById('sort_bar1');
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, sort_result1[cn][k], sort_result_color1[cn][k],"sort_bar1");
+        }
+    }else{
+        let el = document.getElementById("cnt1");
+        el.innerHTML = cnt;
+        let parent_element = document.getElementById('sort_bar1');
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, sort_result1[cnt][k], sort_result_color1[cnt][k],"sort_bar1");
+        }
+    }
+
+    if(sort_result2[cnt][0] == -1){
+        let cn = 0;
+        for(let k = cnt; k >= 0; k--) if(sort_result2[k][0] != -1){
+            cn = k;
+            break;
+        }
+        let el = document.getElementById("cnt2");
+        el.innerHTML = cn;
+        let parent_element = document.getElementById('sort_bar2');
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, sort_result2[cn][k], sort_result_color2[cn][k],"sort_bar2");
+        }
+    }else{
+        let el = document.getElementById("cnt2");
+        el.innerHTML = cnt;
+        let parent_element = document.getElementById('sort_bar2');
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, sort_result2[cnt][k], sort_result_color2[cnt][k],"sort_bar2");
+        }
+    }
+
+    if(sort_result3[cnt][0] == -1){
+        let cn = 0;
+        for(let k = cnt; k >= 0; k--) if(sort_result3[k][0] != -1){
+            cn = k;
+            break;
+        }
+        let el = document.getElementById("cnt3");
+        el.innerHTML = cn;
+        let parent_element = document.getElementById('sort_bar3');
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, sort_result3[cn][k], sort_result_color3[cn][k],"sort_bar3");
+        }
+    }else{
+        let el = document.getElementById("cnt3");
+        el.innerHTML = cnt;
+        let parent_element = document.getElementById('sort_bar3');
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, sort_result3[cnt][k], sort_result_color3[cnt][k],"sort_bar3");
+        }
+    }
+
+    if(sort_result4[cnt][0] == -1){
+        let cn = 0;
+        for(let k = cnt; k >= 0; k--) if(sort_result4[k][0] != -1){
+            cn = k;
+            break;
+        }
+        let el = document.getElementById("cnt4");
+        el.innerHTML = cn;
+        let parent_element = document.getElementById('sort_bar4');
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, sort_result4[cn][k], sort_result_color4[cn][k],"sort_bar4");
+        }
+    }else{
+        let el = document.getElementById("cnt4");
+        el.innerHTML = cnt;
+        let parent_element = document.getElementById('sort_bar4');
+        for (let i = parent_element.childNodes.length-1; i>=0; i--) {
+            parent_element.removeChild(parent_element.childNodes[i]);
+        }
+        for(let k = 0; k < N; k++) {
+            change_bar(k, sort_result4[cnt][k], sort_result_color4[cnt][k],"sort_bar4");
+        }
+    }
+}
+
+var OnButtonClick_start_stop = function(){
+    let el = document.getElementById("button_start_stop");
+    if(is_count == 0){
+        if(cnt == -1){
+            init_visualizer();
+            is_count = 1;
+            handler = {};
+            step_sz = 0;
+            cnt = 0;
+            interval = loopFactry();
+        }else{
+            is_count = 1;
+            interval = loopFactry();
+        }
+        el.value = "stop";
+    }else {
+        is_count = 0;
+        cancelAnimationFrame(interval.id);
+        el.value = "start";
+    }
+}
+OnButtonClick_reset = function(){
+    if(is_count == 1){
+        is_count = 0;
+        cancelAnimationFrame(interval.id);
+        init_visualizer();
+        handler = {};
+        step_sz = 0;
+        cnt = 0;
+        slidebar_el.value = 0;
+        draw_init_A();
+        is_count = 0;
+        //interval = loopFactry();
+    }else {
+        init_visualizer();
+        handler = {};
+        step_sz = 0;
+        cnt = 0;
+        slidebar_el.value = 0;
+        draw_init_A();
+    }
+
+    //interval = loopFactry();
+}

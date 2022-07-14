@@ -1,8 +1,9 @@
 h1{
-    padding:7px;
+    padding:2px;
     color: black;
     font-family: sans-serif;
     font-size: 40px;
+    font-weight: normal;
 }
 
 
@@ -43,8 +44,8 @@ h1{
     padding: 1em;
     position: absolute;
     width: 45%;
-    height: 40%;
-    top: 10%;
+    height: 35%;
+    top: 20%;
     left: 1%;
 }
 
@@ -58,8 +59,8 @@ h1{
     padding: 1em;
     position: absolute;
     width: 45%;
-    height: 40%;
-    top:55%;
+    height: 35%;
+    top: 60%;
     left: 1%;
 }
 
@@ -73,8 +74,8 @@ h1{
     padding: 1em;
     position: absolute;
     width: 45%;
-    height: 40%;
-    top: 10%;
+    height: 35%;
+    top: 20%;
     left: 50%;
 }
 
@@ -88,7 +89,7 @@ h1{
     padding: 1em;
     position: absolute;
     width: 45%;
-    height: 40%;
-    top: 55%;
+    height: 35%;
+    top: 60%;
     left: 50%;
 }

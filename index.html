@@ -3,28 +3,31 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="main.css" />
-    <script type="text/javascript" src="main.js"></script>
     <title>Sort Algorithm</title>
 </head>
 <body>
 
     <p>
         <h1>Sort Algorithm</h1>
-    </p>
-    <p>
-
+        <input type="button" id="button_start_stop" value="start" onclick="OnButtonClick_start_stop();" style="height: 45px;width: 45px;"/>
+        <input type="button" id="button_reset" value="reset" onclick="OnButtonClick_reset();" style="height: 45px;width: 45px;"/><br/>
+        <input type="range" id="slidebar_cnt" min="0" max="300" step="1" value="0" style="width: 50%;">
     </p>
     <p>
         <div id="main_style1">
             <!--<p>Click somewhere in window to stop count up <span id="countup">1</span></p>-->
             <p>
                 <span style="padding:4px;color: black;font-family: sans-serif;font-size: 30px;">Shell Sort</span>
+                <select name="sort_name">
+                    <option value="jan">1月</option>
+                    <option value="feb">2月</option>
+                </select>
                 <p>
                     <span id="cnt1">0</span>
                 </p>
             </p>
             <div id="sort_bar1"></div>
-        </div> 
+        </div>
         <div id="main_style2">
             <!--<p>Click somewhere in window to stop count up <span id="countup">1</span></p>-->
             <p>
@@ -44,7 +47,7 @@
                 </p>
             </p>
             <div id="sort_bar3"></div>
-        </div> 
+        </div>
         <div id="main_style4">
             <!--<p>Click somewhere in window to stop count up <span id="countup">1</span></p>-->
             <p>
@@ -59,6 +62,7 @@
 
     </p>
 
+    <script type="text/javascript" src="main.js"></script>
 </body>
 
 
