@@ -6,11 +6,19 @@ const max_A = 70;
 
 var slidebar_el = document.getElementById("slidebar_cnt");
 slidebar_el.value = 0;
-
 var bar_scale = function(){
     bar_w = window.innerWidth*0.4*0.89/N;
-    bar_h = window.innerHeight*0.4*0.6/max_A;
+    bar_h = window.innerHeight*0.4*0.5/max_A;
 }
+var pulldown_algorithm_el = document.getElementById("sort_algorithm_type");
+var Sort_Algorithms_Name = ["Bubble Sort", "Quick Sort", "Comb Sort","Heap Sort","Merge Sort","Shell Sort","Selection Sort","Insertion Sort"];
+for(let i = 0; i < Sort_Algorithms_Name.length; i++){
+    let new_element = document.createElement('option');
+    new_element.value = i;
+    new_element.innerHTML = Sort_Algorithms_Name[i];
+    pulldown_algorithm_el.appendChild(new_element); 
+} 
+
 
 var change_bar = function(xxx,hhh,ff,element_id){
     let parent_element = document.getElementById(element_id);
@@ -293,37 +301,45 @@ var heap_sort = function(){
     let cn = 0;
     for(let k = 0; k < N; k++) res[cn][k] = A[k];
     cn++;
-    let downheap = function(k,r){
-        let v = A[k];
-        while(1){
-            let j = 2*k+1;
-            if(j > r) break;
-            if(j != r) {
-                if(A[j+1] > A[j]) j += 1;
-            }
-            if(v >= A[j]) break;
-            A[k] = A[j];
-            k = j;
-            for(let k = 0; k < N; k++) res[cn][k] = A[k];
-            res_color[cn][k] = res_color[cn][j] = 2;
-            cn++;
-        }
-        A[k] = v;
+
+    let max_heapify = function(array_len,i){
+        let l = i*2+1;
+        let r = i*2+2;
+        let m = i;
+
+        if(l < array_len && A[m] < A[l]) m = l;
+        if(r < array_len && A[m] < A[r]) m = r;
+
         for(let k = 0; k < N; k++) res[cn][k] = A[k];
+        for(let k = 0; k < array_len; k++) res_color[cn][k] = 1;
         cn++;
+
+        if(m != i){
+            let a = A[i];
+            A[i] = A[m];
+            A[m] = a;
+            res_color[cn-1][i] = res_color[cn-1][m] = 2;
+            max_heapify(array_len,m);
+        }
+
+
     }
-    for(let i = Math.floor((N-2)/2); i >= 0; i--){
-        downheap(i,N-1);
+    let bulid_max_heap = function(array_len){
+        for(let i = Math.floor(array_len/2); i >= 0; i--) max_heapify(array_len,i);
     }
-    for(let i = N-1; i > 0; i--){
+    bulid_max_heap(N);  
+    for(let i = N-1; i >= 0; i--){
         let a = A[0];
         A[0] = A[i];
         A[i] = a;
+        if(A[0] == A[i]) continue;
+        max_heapify(i,0);
         for(let k = 0; k < N; k++) res[cn][k] = A[k];
         res_color[cn][0] = res_color[cn][i] = 2;
         cn++;
-        downheap(0,i-1);
     }
+
+ 
     res[cn][0] = -1;
     return [res,res_color];
 }
