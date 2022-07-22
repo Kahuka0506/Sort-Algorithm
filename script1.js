@@ -119,7 +119,7 @@ var loopFactry = function(){
         step_sz += 1;
         let fin = 0;
 
-        if(step_sz % 4 == 0){
+        if(step_sz % draw_speed == 0){
             let fff = 0;
             let el = document.getElementById("cnt1");
             el.innerHTML = cnt;
