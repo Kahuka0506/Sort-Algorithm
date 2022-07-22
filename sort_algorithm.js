@@ -38,6 +38,62 @@ var bubble_sort = function(A){
 }
 
 
+var shaker_sort = function(A){
+    let N = A.length;
+    let res = new Array(N*N+1);
+    for(let b = 0; b < N*N+1; b++) {
+      res[b] = new Array(N);
+      for(let a = 0; a < N; a++) {
+          res[b][a] = -1;
+      }
+    }
+    let res_color = new Array(N*N+1);
+    for(let b = 0; b < N*N+1; b++) {
+      res_color[b] = new Array(N);
+      for(let a = 0; a < N; a++) {
+          res_color[b][a] = 0;
+      }
+    }
+
+    let cn = 0;
+    for(let k = 0; k < N; k++) res[cn][k] = A[k];
+    cn++;
+    let s = 0;
+    let t = N-1;
+    while(t-s > 1){
+        for(let j = s; j <= t; j++){
+            res_color[cn][j] = 1;
+            if(A[j-1] > A[j]){
+                var a = A[j-1];
+                A[j-1] = A[j];
+                A[j] = a;
+                //res_color[cn][j-1] = 2;
+                res_color[cn][j] = 2;
+            }
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
+            cn++;
+        }
+        t--;
+        for(let j = t; j >= s; j--){
+            res_color[cn][j] = 1;
+            if(A[j-1] > A[j]){
+                var a = A[j-1];
+                A[j-1] = A[j];
+                A[j] = a;
+                //res_color[cn][j-1] = 2;
+                res_color[cn][j] = 2;
+            }
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
+            cn++;
+        }
+        s++;
+    }
+    
+    res[cn][0] = -1;
+    return [res,res_color];
+}
+
+
 var insertion_sort = function(A){
     let N = A.length;
     let res = new Array(N*N+1);
@@ -435,7 +491,63 @@ var quick_sort = function(A){
     return [res,res_color];
 }
 
+ 
 
+var odd_even_sort = function(A){
+    let N = A.length;
+    let res = new Array(N*N+1);
+    for(let b = 0; b < N*N+1; b++) {
+      res[b] = new Array(N);
+      for(let a = 0; a < N; a++) {
+          res[b][a] = -1;
+      }
+    }
+    let res_color = new Array(N*N+1);
+    for(let b = 0; b < N*N+1; b++) {
+      res_color[b] = new Array(N);
+      for(let a = 0; a < N; a++) {
+          res_color[b][a] = 0;
+      }
+    }
 
+    let cn = 0;
+    for(let k = 0; k < N; k++) res[cn][k] = A[k];
+    cn++;
+    while(1){
+        for(let i = 0; i*2+1 < N; i++){
+            res_color[cn][i*2+1] = 1;
+            res_color[cn][i*2] = 1;
+            if(A[i*2] > A[i*2+1]){
+                var a = A[i*2];
+                A[i*2] = A[i*2+1];
+                A[i*2+1] = a;
+                res_color[cn][i*2+1] = 2;
+                res_color[cn][i*2] = 2;
+            }
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
+            cn++;
+        }
+        for(let i = 1; i*2 < N; i++){
+            res_color[cn][i*2-1] = 1;
+            res_color[cn][i*2] = 1;
+            if(A[i*2-1] > A[i*2]){
+                var a = A[i*2];
+                A[i*2] = A[i*2-1];
+                A[i*2-1] = a;
+                res_color[cn][i*2-1] = 2;
+                res_color[cn][i*2] = 2;
+            }
+            for(let k = 0; k < N; k++) res[cn][k] = A[k];
+            cn++;
+        }
+        let f = 1;
+        for(let i = 0; i < N-1; i++) if(A[i] > A[i+1]) f = 0;
+        if(f == 1) break;
+    }
+     
+    res[cn][0] = -1;
+    return [res,res_color];
+}
 
-var Sort_Algorithms = [bubble_sort, quick_sort, comb_sort,heap_sort,merge_sort,shell_sort,selection_sort,insertion_sort];
+var Sort_Algorithms = [bubble_sort, shaker_sort, quick_sort, comb_sort,heap_sort,merge_sort,shell_sort,selection_sort,insertion_sort, odd_even_sort];
+var Sort_Algorithms_Name = ["Bubble Sort", "Shaker Sort", "Quick Sort", "Comb Sort","Heap Sort","Merge Sort","Shell Sort","Selection Sort","Insertion Sort", "Odd-Even Sort"];

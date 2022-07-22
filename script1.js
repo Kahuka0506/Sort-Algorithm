@@ -16,7 +16,6 @@ var bar_scale = function(){
     bar_h = window.innerHeight*0.5*0.52/max_A;
 }
 var pulldown_algorithm_el = document.getElementsByName("sort_algorithm_type"); 
-var Sort_Algorithms_Name = ["Bubble Sort", "Quick Sort", "Comb Sort","Heap Sort","Merge Sort","Shell Sort","Selection Sort","Insertion Sort"];
 for(let ii = 0; ii < pulldown_algorithm_el.length;ii++){
     for(let i = 0; i < Sort_Algorithms_Name.length; i++){
         let new_element = document.createElement('option');

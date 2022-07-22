@@ -3,6 +3,9 @@
 ### Bubble Sort
 $O(n^2)$
 
+### Shaker Sort
+$O(n^2)$
+
 ### Quick Sort
 $O(n\text{log}n)$
 
@@ -22,4 +25,7 @@ $O(n\text{log}n)$
 $O(n^2)$
 
 ### Insertion Sort
+$O(n^2)$
+
+### Odd-Even Sort
 $O(n^2)$
