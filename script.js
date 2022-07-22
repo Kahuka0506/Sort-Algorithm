@@ -1,11 +1,11 @@
 var is_count = 0;
-const N = 60;
+var N = 100;
 var bar_w = 20;
 var bar_h = 20;
 var slidebar_el = document.getElementById("slidebar_cnt");
 slidebar_el.value = 0;
 var bar_scale = function(){
-    bar_w = window.innerWidth*0.7*0.7/N;
+    bar_w = window.innerWidth*0.5*0.7/N;
     bar_h = window.innerHeight*0.89*0.5/max_A;
 }
 var pulldown_algorithm_el = document.getElementById("sort_algorithm_type");
@@ -17,12 +17,18 @@ for(let i = 0; i < Sort_Algorithms_Name.length; i++){
     pulldown_algorithm_el.appendChild(new_element); 
 } 
 
+var draw_speed = 4;
+var change_speed = function(){
+    let el = document.getElementById("speed_input");
+    draw_speed = el.value;
+}
+
 
 
 var sort_result1 = []; 
 var sort_result_color1 = []; 
 var A = [], A0 = [];
-const max_A = 70;
+var max_A = 70;
 var reset_array_A = function(){
     A = new Array(N);
     for(let i = 0; i < N; i++) A[i] = Math.floor(Math.random()*max_A)+1;
@@ -38,10 +44,20 @@ var reset_array_A = function(){
 var change_bar = function(xxx,hhh,ff,element_id){
     let parent_element = document.getElementById(element_id);
     let new_element = document.createElement('div');
+    /*
     if(ff == 0) new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #a7ff83; border: solid black 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
     else if(ff == 1) new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #17b978; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
     else new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #086972; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
-    parent_element.appendChild(new_element);
+    */
+   /*
+    if(ff == 0) new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #17b978; border: solid black 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
+    else if(ff == 1) new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #086972; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
+    else new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #a7ff83; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
+    */
+    if(ff == 0) new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #87CEEB; border: solid black 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
+    else if(ff == 1) new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #20b2aa; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
+    else new_element.style = `width: ${bar_w}px; height: ${bar_h*hhh}px; background-color: #fa8072; border: solid blue 0px; position: absolute; transform: translate(${5+(bar_w+1)*xxx}px,${bar_h*(max_A-hhh)}px);`;
+    parent_element.appendChild(new_element); 
 }
 var update_visualizer = function(itr_id, bar_id, cnt){
     let el = document.getElementById(itr_id);
@@ -51,7 +67,7 @@ var update_visualizer = function(itr_id, bar_id, cnt){
         parent_element.removeChild(parent_element.childNodes[i]);
     }
     let new_element = document.createElement('div');
-    new_element.style = `width: ${(bar_w+1)*N*1.01}px; height: ${bar_h*max_A*1.01}px; background-color: #071a52; border: solid black 1px; position: absolute; transform: translate(${0}px,${0}px);`;
+    new_element.style = `width: ${(bar_w+1)*N*1.01}px; height: ${bar_h*max_A*1.03}px; background-color: white; border: solid black 1px; position: absolute; transform: translate(${0}px,${-bar_h*0.03*max_A}px);`;
     parent_element.appendChild(new_element); 
     for(let k = 0; k < N; k++) {
         change_bar(k, sort_result1[cnt][k], sort_result_color1[cnt][k],bar_id);
@@ -67,7 +83,7 @@ var draw_init_A = function(){
             parent_element.removeChild(parent_element.childNodes[i]);
         }
         let new_element = document.createElement('div');
-        new_element.style = `width: ${(bar_w+1)*N*1.01}px; height: ${bar_h*max_A*1.01}px; background-color: #071a52; border: solid black 1px; position: absolute; transform: translate(${0}px,${0}px);`;
+        new_element.style = `width: ${(bar_w+1)*N*1.01}px; height: ${bar_h*max_A*1.03}px; background-color: white; border: solid black 1px; position: absolute; transform: translate(${0}px,${-bar_h*0.03*max_A}px);`;
         parent_element.appendChild(new_element); 
         for(let k = 0; k < N; k++) {
             change_bar(k, A0[k], 0,"sort_bar"+num.toString(10));
@@ -90,7 +106,7 @@ var init_visualizer = function(){
             break;
         }
     }
-
+    change_speed();
     bar_scale();
 }
 //var Sort_Algorithms = [bubble_sort, quick_sort, comb_sort,heap_sort,merge_sort,shell_sort,selection_sort,insertion_sort];
@@ -120,7 +136,7 @@ var loopFactry = function(){
         step_sz += 1;
         let fin = 0;
 
-        if(step_sz % 4 == 0){
+        if(step_sz % draw_speed == 0){
             let f1 = 0;
 
             if(sort_result1[cnt][0] != -1){
@@ -146,8 +162,6 @@ var loopFactry = function(){
     handler.id = requestAnimationFrame(loop);
     return handler;
 }
-
-
 
 
 
@@ -184,11 +198,11 @@ var OnButtonClick_start_stop = function(){
             is_count = 1;
             interval = loopFactry();
         }
-        el.value = "stop";
+        el.value = "■";
     }else {
         is_count = 0;
         cancelAnimationFrame(interval.id);
-        el.value = "start";
+        el.value = "▶";
     }
 }
 OnButtonClick_reset = function(){
@@ -202,7 +216,9 @@ OnButtonClick_reset = function(){
         slidebar_el.value = 0;
         draw_init_A();
         is_count = 0;
-        //interval = loopFactry();
+
+        let el = document.getElementById("button_start_stop");
+        el.value = "▶";
     }else {
         init_visualizer();
         handler = {};
@@ -210,7 +226,44 @@ OnButtonClick_reset = function(){
         cnt = 0;
         slidebar_el.value = 0;
         draw_init_A();
+
+        let el = document.getElementById("button_start_stop");
+        el.value = "▶";
     }
 
     //interval = loopFactry();
+}
+
+var change_N = function(){
+    if(is_count == 1){
+        is_count = 0;
+        cancelAnimationFrame(interval.id);
+        
+        let el = document.getElementById("N_input");
+        if(el.value > 200) el.value = 200; 
+        N = el.value;
+        max_A = N+2;
+
+        init_visualizer();
+        handler = {};
+        step_sz = 0;
+        cnt = 0;
+        slidebar_el.value = 0;
+        draw_init_A();
+        is_count = 0;
+        //interval = loopFactry();
+    }else {
+        let el = document.getElementById("N_input");
+        if(el.value > 200) el.value = 200; 
+        N = el.value; 
+        max_A = N+2;
+        init_visualizer();
+        handler = {};
+        step_sz = 0;
+        cnt = 0;
+        slidebar_el.value = 0;
+        draw_init_A();
+    }
+    let el = document.getElementById("button_start_stop");
+    el.value = "▶";
 }
